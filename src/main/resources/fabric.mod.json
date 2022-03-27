@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "souperrorsuppressor",
+  "version": "${version}",
+
+  "name": "Soup Error Suppressor",
+  "description": "Suppresses certain errors and warnings from the log.",
+  "authors": [
+    "ehwuts matsu"
+  ],
+  "contact": {
+    "homepage": "https://github.com/ehwuts/",
+    "sources": "https://github.com/ehwuts/teamerrorsuppressor"
+  },
+
+  "license": "MIT",
+  "icon": "assets/souperrorsuppressor/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": []
+  },
+  "mixins": [
+    "souperrorsuppressor.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
