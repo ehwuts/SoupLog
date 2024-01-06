@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "yeoldesoupe.SoupLog"
+      "yeoldesoupe.souplog.SoupLog"
     ]
   },
   "mixins": [
