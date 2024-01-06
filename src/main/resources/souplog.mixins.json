@@ -6,7 +6,9 @@
   "mixins": [
   ],
   "client": [
-    "ExampleMixin"
+    "ScoreboardMixin",
+	"ClientPlayNetworkHandlerMixin",
+	"ChatHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
