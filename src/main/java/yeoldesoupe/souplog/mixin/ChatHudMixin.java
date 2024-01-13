@@ -7,6 +7,7 @@ import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.HoverEvent;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,14 +17,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChatHud.class)
 public class ChatHudMixin {
 	//shamelessly stolen from minerdwarf
-	private void bruteForceLoop(Text checkText) {
+	private void bruteForceParse(Text checkText) {
+		if (checkText == null) return;
+		
+		SoupLog.LOGGER.info("Soup says {}", (Object)(checkText.toString()));
+		
+		HoverEvent checkHover = checkText.getStyle().getHoverEvent();
+		if (checkHover != null) {
+			SoupLog.LOGGER.info("Soup shows {}", (Object)(checkHover.toString()));
+		}
+		
 		List<Text> checkNext = checkText.getSiblings();
 
 		for (Text newText : checkNext) {
 			bruteForceParse(newText);
 		}
 	}
-	
+	/*
 	private void bruteForceParse(Text checkText) {
 		if (checkText == null) return;
 
@@ -57,9 +67,10 @@ public class ChatHudMixin {
 		bruteForceLoop(checkText);
 
 	}
-	
+	*/
 	@Inject(method = "logChatMessage", at = @At("HEAD"), cancellable = true)
-	private void logChatMessage(CallbackInfo info) {
-		//ChatHud.LOGGER.info("This line is printed by an example mod mixin!");
+	//private void logChatMessage(Text message, @Nullable MessageIndicator indicator) {
+	private void logChatMessage(Text message, @Nullable MessageIndicator indicator, CallbackInfo info) {
+		bruteForceParse(message);
 	}
 }
