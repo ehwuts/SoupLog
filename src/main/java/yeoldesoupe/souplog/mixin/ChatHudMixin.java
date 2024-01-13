@@ -16,58 +16,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //private void logChatMessage(Text message, @Nullable MessageIndicator indicator) {
 @Mixin(ChatHud.class)
 public class ChatHudMixin {
-	//shamelessly stolen from minerdwarf
 	private void bruteForceParse(Text checkText) {
 		if (checkText == null) return;
 		
-		SoupLog.LOGGER.info("Soup says {}", (Object)(checkText.toString()));
-		
-		HoverEvent checkHover = checkText.getStyle().getHoverEvent();
-		if (checkHover != null) {
-			SoupLog.LOGGER.info("Soup shows {}", (Object)(checkHover.toString()));
+		if (checkText.getStyle() != null) {			
+			HoverEvent checkHover = checkText.getStyle().getHoverEvent();
+			if (checkHover != null) {				
+				if (checkHover.getAction().getName().contains("show_text")) {
+					SoupLog.LOGGER.info("HoverEvent {} {}", (Object)(checkHover.getAction().getName()), (Object)(checkHover.toJson().getAsJsonObject("contents").get("text")));
+					//return;
+				}
+			}
 		}
 		
+		//shamelessly stolen from minerdwarf
 		List<Text> checkNext = checkText.getSiblings();
-
 		for (Text newText : checkNext) {
 			bruteForceParse(newText);
 		}
 	}
-	/*
-	private void bruteForceParse(Text checkText) {
-		if (checkText == null) return;
-
-		//If the Text does not have style or the style does not have a hoverEvent, try to split otherwise return.
-		if (checkText.getStyle() != null && checkText.getStyle().getHoverEvent() != null) {
-			HoverEvent checkHover = checkText.getStyle().getHoverEvent();
-
-			if (!checkHover.getAction().toString().contains("show_item")) {
-				bruteForceLoop(checkText); 
-				return;
-			}
-
-			ItemStack stack = checkHover.getValue(HoverEvent.Action.SHOW_ITEM).asStack();
-
-			if (stack.getNbt() == null 
-			 || !stack.getNbt().contains("Monumenta") 
-			 || !stack.getNbt().getCompound("Monumenta").getString("Tier").equals("zenithcharm")
-//			 || DwarfHighlightMod.uniqueZenithCharms.contains(stack.getNbt().getCompound("Monumenta").getCompound("PlayerModified").getLong("DEPTHS_CHARM_UUID"))
-			) {
-				bruteForceLoop(checkText); 
-				return;
-			}
-
-			// DwarfHighlightMod.LOGGER.info("Message charm: " + stack.getNbt().getCompound("plain").getCompound("display").getString("Name"));
-
-			//outputAllCharms(stack);
-
-			SoupLog.LOGGER.info("New charm");
-		}
-
-		bruteForceLoop(checkText);
-
-	}
-	*/
+	
 	@Inject(method = "logChatMessage", at = @At("HEAD"), cancellable = true)
 	//private void logChatMessage(Text message, @Nullable MessageIndicator indicator) {
 	private void logChatMessage(Text message, @Nullable MessageIndicator indicator, CallbackInfo info) {
