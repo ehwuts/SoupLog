@@ -2,6 +2,7 @@ package yeoldesoupe.souplog.mixin;
 
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +28,8 @@ public class ClientPlayNetworkHandlerMixin {
 	
 	@Inject(method = "onEntityPassengersSet", at = @At("HEAD"), cancellable = true)
 	public void onEntityPassengersSet(EntityPassengersSetS2CPacket packet, CallbackInfo info) {
-		if (this.world.getEntityById(packet.getId()) == null) {
+        Entity entity = this.world.getEntityById(packet.getId());
+        if (entity == null) {
 			info.cancel();
 		}
 	}

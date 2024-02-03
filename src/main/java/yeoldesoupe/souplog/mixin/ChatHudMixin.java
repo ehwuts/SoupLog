@@ -21,17 +21,17 @@ public class ChatHudMixin {
 	//based on code shamelessly stolen from minerdwarf
 	private ArrayList<String> bruteForceParse(Text checkText) {
 		ArrayList<String> result = new ArrayList<String>();
-		
-		if (checkText != null) {			
-			if (checkText.getStyle() != null) {			
+
+		if (checkText != null) {
+			if (checkText.getStyle() != null) {
 				HoverEvent checkHover = checkText.getStyle().getHoverEvent();
-				if (checkHover != null) {				
+				if (checkHover != null) {
 					if (checkHover.getAction().getName().contains("show_text")) {
 						result.add(checkHover.toJson().getAsJsonObject("contents").get("text").getAsString());
 					}
 				}
 			}
-			
+
 			List<Text> checkNext = checkText.getSiblings();
 			for (Text newText : checkNext) {
 				result.addAll(bruteForceParse(newText));
@@ -39,7 +39,7 @@ public class ChatHudMixin {
 		}
 		return result;
 	}
-	
+
 	@Inject(method = "logChatMessage", at = @At("HEAD"), cancellable = true)
 	//private void logChatMessage(Text message, @Nullable MessageIndicator indicator) {
 	private void logChatMessage(Text message, @Nullable MessageIndicator indicator, CallbackInfo info) {
