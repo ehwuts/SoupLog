@@ -4,7 +4,7 @@
 
 ## Features
 - Suppresses unknown team and unloaded mount errors, which tend to flood the client log with their verbose spam.
-- TODO: Expands hovertext events into logged content.
+- Expands show_text HoverEvent contents for coreprotect logs.
 
 ## License
 
