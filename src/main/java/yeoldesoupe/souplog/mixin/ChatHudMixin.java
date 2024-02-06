@@ -43,7 +43,9 @@ public class ChatHudMixin {
 	@Inject(method = "logChatMessage", at = @At("HEAD"), cancellable = true)
 	//private void logChatMessage(Text message, @Nullable MessageIndicator indicator) {
 	private void logChatMessage(Text message, @Nullable MessageIndicator indicator, CallbackInfo info) {
-		if (message.toString().contains("§")) {
+		if (message.getString().contains("§")) {
+			//SoupLog.LOGGER.info(message.toString());
+			//SoupLog.LOGGER.info(message.getString());
 			message = (Text)(((MutableText)message).append(" " + String.join(" ", bruteForceParse(message))));
 		}
 	}
