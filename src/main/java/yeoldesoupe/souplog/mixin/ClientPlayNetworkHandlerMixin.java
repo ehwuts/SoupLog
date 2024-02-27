@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.Shadow;
+//import org.slf4j.Logger;
 
 /*
 Prevents activation of this line:
@@ -16,19 +16,17 @@ Prevents activation of this line:
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
-	/*
-	@Inject(method = "onEntityPassengersSet", at = @At(value="INVOKE", target="L/org/apache/logging/log4j/Logger;warn(I)I", ordinal = 0), cancellable = true)
-	public void onEntityPassengersSet(EntityPassengersSetS2CPacket packet, CallbackInfo info) {
+	@Inject(
+		method = "onEntityPassengersSet(Lnet/minecraft/network/packet/s2c/play/EntityPassengersSetS2CPacket;)V", 
+		at = @At(
+			value = "INVOKE", 
+			target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;)V",
+			ordinal = 0,
+			remap = false
+		), 
+		cancellable = true
+	)
+	private void dontWarn(CallbackInfo info) {
 		info.cancel();
-	}
-	*/
-	@Shadow
-	private ClientWorld world;
-	
-	@Inject(method = "onEntityPassengersSet", at = @At("HEAD"), cancellable = true)
-	public void onEntityPassengersSet(EntityPassengersSetS2CPacket packet, CallbackInfo info) {
-		if (this.world != null && this.world.getEntityById(packet.getId()) == null) {
-			info.cancel();
-		}
 	}
 }
